@@ -14,9 +14,6 @@ module.exports = function(app) {
             // handle error
             console.log(error);
         })
-        .finally(function () {
-            // always executed
-        });
 
     });
 
