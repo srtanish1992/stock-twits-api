@@ -10,7 +10,7 @@ class HomePage extends React.Component {
 
     callApi = () => {
 
-        axios.get('http://localhost:3006')
+        axios.get('http://157.245.209.85:3006')
         .then(function (response) {
           // handle success
           console.log(response.data.messages[0]);
