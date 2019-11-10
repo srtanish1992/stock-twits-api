@@ -3,6 +3,7 @@ import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import TweetContainer from './tweetContainer';
+import Symbol from './symbol';
 import _ from 'lodash';
 
 
@@ -16,7 +17,8 @@ class Input extends React.Component {
         super();
         this.state = {
             tweets: [],
-            inputString: ''
+            inputString: '',
+            inputStringArray:[]
         }
         
     }
@@ -31,10 +33,11 @@ class Input extends React.Component {
 
     getTweets = () => {
         let inputStringArray = this.splitInputString();
+        this.setState({inputStringArray});
         
         // console.log(inputStringArray);
 
-        axios.get('http://localhost:5000', {
+        axios.get('http://localhost:5003', {
             params: {
               symbols: inputStringArray
             }
@@ -54,6 +57,13 @@ class Input extends React.Component {
             console.log(error);
           })
 
+    }
+
+    deleteTweets =(s) => {
+        console.log(s);
+        const tweets = this.state.tweets.filter(tweet => !tweet.body.toUpperCase().includes(`$${s}`));
+        console.log(tweets);
+        this.setState({tweets});
     }
 
     render(){
@@ -79,8 +89,17 @@ class Input extends React.Component {
                     </Button>
                 </div>
 
+                {this.state.inputStringArray.length > 0 &&
+                    <Symbol 
+                    symbols = {this.state.inputStringArray}
+                    deleteTweet = {this.deleteTweets}
+                    />
+                }
+
                 {this.state.tweets.length > 0 && 
-                    <TweetContainer tweets = {this.state.tweets}/>
+                    <TweetContainer 
+                    tweets = {this.state.tweets}
+                    />
                 }
             </React.Fragment>
 

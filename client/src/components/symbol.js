@@ -18,25 +18,21 @@ const useStyles = makeStyles(theme => ({
 export default function ChipsArray(props) {
   const classes = useStyles();
 
-    console.log(props);
-
-//   const handleDelete = chipToDelete => () => {
-//     if (chipToDelete.label === 'React') {
-//       alert('Why would you want to delete React?! :)');
-//       return;
-//     }
-
-//     setChipData(chips => chips.filter(chip => chip.key !== chipToDelete.key));
-//   };
-
   return (
     <Paper className={classes.root}>
-      <Chip
+    {
+      props.symbols.map(symbol=>(
+        <Chip
         // icon={<FaceIcon />}
-        label={props.symbol}
-        // onClick={handleClick}
-        // onDelete={handleDelete}
+        label={symbol}
+        key={symbol}
+        // onClick={props.deleteTweet}
+        onDelete={()=>props.deleteTweet(symbol)}
+        className={classes.chip}
       />
+      ))
+    }
+      
     </Paper>
   );
 }
