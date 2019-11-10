@@ -1,11 +1,12 @@
 const axios = require('axios');
-const url = 'https://api.stocktwits.com/api/2/streams/symbol/AAPL.json';
 
 module.exports = function(app) {
 
     app.get('/', function(req,res,next){
 
-        axios.get(url)
+        console.log(req.query);
+
+        axios.get(`https://api.stocktwits.com/api/2/streams/symbol/${req.query.tweetSymbol}.json`)
         .then(function (response) {
             // handle success
             res.send(response.data);
