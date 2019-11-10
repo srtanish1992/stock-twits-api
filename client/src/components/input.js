@@ -3,8 +3,14 @@ import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import TweetContainer from './tweetContainer';
+import _ from 'lodash';
+
+
+let allTweets = [];
 
 class Input extends React.Component {
+
+    
 
     constructor(){
         super();
@@ -12,6 +18,7 @@ class Input extends React.Component {
             tweets: [],
             inputString: ''
         }
+        
     }
 
     handleChange = (e) => {
@@ -24,7 +31,8 @@ class Input extends React.Component {
 
     getTweets = () => {
         let inputStringArray = this.splitInputString();
-        console.log(inputStringArray);
+        
+        // console.log(inputStringArray);
 
         axios.get('http://localhost:5000', {
             params: {
@@ -32,9 +40,15 @@ class Input extends React.Component {
             }
           })
           .then(response =>  {
-            console.log(response);
-            let tweets = response.data.messages;
-            this.setState({tweets})
+            // console.log(response.data);
+            for (let i = 0; i < response.data.length; i++){
+                allTweets.push(response.data[i]);
+            }
+
+            let uniqueTweets = _.uniqBy(allTweets, 'id');
+            
+            this.setState({tweets:uniqueTweets});
+            console.log(this.state.tweets);
           })
           .catch(error => {
             console.log(error);
@@ -65,7 +79,7 @@ class Input extends React.Component {
                     </Button>
                 </div>
 
-                {this.state.tweets > 0 && 
+                {this.state.tweets.length > 0 && 
                     <TweetContainer tweets = {this.state.tweets}/>
                 }
             </React.Fragment>
