@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import TweetContainer from './tweetContainer';
@@ -24,6 +25,21 @@ class Input extends React.Component {
     getTweets = () => {
         let inputStringArray = this.splitInputString();
         console.log(inputStringArray);
+
+        axios.get('http://localhost:5000', {
+            params: {
+              symbols: inputStringArray
+            }
+          })
+          .then(response =>  {
+            console.log(response);
+            let tweets = response.data.messages;
+            this.setState({tweets})
+          })
+          .catch(error => {
+            console.log(error);
+          })
+
     }
 
     render(){

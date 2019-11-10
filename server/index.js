@@ -17,7 +17,7 @@ router(app);
 
 // Server setup
 
-const port = process.env.PORT || 9004;
+const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 // server.listen(port,'157.245.209.85');
 server.listen(port);
