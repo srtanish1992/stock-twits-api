@@ -7,7 +7,7 @@ import Symbol from './symbol';
 import _ from 'lodash';
 
 
-let allTweets = [];
+
 
 class Input extends React.Component {
 
@@ -16,9 +16,11 @@ class Input extends React.Component {
     constructor(){
         super();
         this.state = {
+            allTweets:[],
             tweets: [],
             inputString: '',
-            inputStringArray:[]
+            inputStringArray:[],
+            symbolCounts:[]
         }
         
     }
@@ -28,31 +30,43 @@ class Input extends React.Component {
     }
 
     splitInputString = () => {
-        return this.state.inputString.replace(/\s/g, '').split(",");
+        return this.state.inputString.replace(/\s/g, '').toUpperCase().split(",");
     }
 
+    
+
     getTweets = () => {
-        let inputStringArray = this.splitInputString();
-        this.setState({inputStringArray});
+        const stringArray = this.state.inputStringArray;
+
+        const splitString = this.splitInputString();
+
+        for(let i = 0; i < splitString.length ; i++) {
+            if(!stringArray.includes(splitString[i]))
+                stringArray.push(splitString[i])
+        }
+        this.setState({inputStringArray:stringArray});
         
         // console.log(inputStringArray);
 
-        axios.get('http://localhost:5003', {
+        axios.get('http://localhost:5004', {
             params: {
-              symbols: inputStringArray
+              symbols: this.state.inputStringArray
             }
           })
           .then(response =>  {
             // console.log(response.data);
-            for (let i = 0; i < response.data.length; i++){
-                allTweets.push(response.data[i]);
+            for (let i = 0; i < response.data.allTweets.length; i++){
+                this.state.allTweets.push(response.data.allTweets[i]);
             }
 
-            let uniqueTweets = _.uniqBy(allTweets, 'id');
+            let uniqueTweets = _.uniqBy(this.state.allTweets, 'id');
             
             this.setState({tweets:uniqueTweets});
-            console.log(this.state.tweets);
+            this.setState({symbolCounts:response.data.symbolCounts});
           })
+        //   .then(response => {
+        //       this.getCount();
+        //   })
           .catch(error => {
             console.log(error);
           })
@@ -61,9 +75,24 @@ class Input extends React.Component {
 
     deleteTweets =(s) => {
         console.log(s);
-        const tweets = this.state.tweets.filter(tweet => !tweet.body.toUpperCase().includes(`$${s}`));
+        const tweets = this.state.tweets.filter(tweet => !tweet.body.toUpperCase().includes(`$${s.symbol}`));
         console.log(tweets);
-        this.setState({tweets});
+
+        const symbolCountsArray = this.state.symbolCounts;
+
+        const inputStringArray = this.state.inputStringArray;
+
+        for (let i = 0; i < symbolCountsArray.length; i++){
+            if (symbolCountsArray[i].symbol === s.symbol)
+                symbolCountsArray.splice(i,1);
+        }
+
+        for (let i = 0; i < inputStringArray.length; i++){
+            if (inputStringArray[i] === s.symbol)
+                inputStringArray.splice(i,1);
+        }
+
+        this.setState({tweets,allTweets:tweets,symbolCounts : symbolCountsArray,inputStringArray});
     }
 
     render(){
@@ -89,10 +118,10 @@ class Input extends React.Component {
                     </Button>
                 </div>
 
-                {this.state.inputStringArray.length > 0 &&
+                {this.state.symbolCounts.length > 0 &&
                     <Symbol 
-                    symbols = {this.state.inputStringArray}
-                    deleteTweet = {this.deleteTweets}
+                        symbols = {this.state.symbolCounts}
+                        deleteTweet = {this.deleteTweets}
                     />
                 }
 

@@ -18,19 +18,36 @@ const useStyles = makeStyles(theme => ({
 export default function ChipsArray(props) {
   const classes = useStyles();
 
+  
+
   return (
+    
     <Paper className={classes.root}>
+
+    
+  
     {
-      props.symbols.map(symbol=>(
-        <Chip
-        // icon={<FaceIcon />}
-        label={symbol}
-        key={symbol}
-        // onClick={props.deleteTweet}
-        onDelete={()=>props.deleteTweet(symbol)}
-        className={classes.chip}
-      />
-      ))
+      props.symbols.map(symbol=>{
+        
+          let icon;
+  
+          
+            icon = <div>{symbol.count}</div>;
+          
+
+          return (
+            <Chip
+              icon={icon}
+              label={symbol.symbol}
+              key={symbol.symbol}
+              // onClick={props.deleteTweet}
+              onDelete={()=>props.deleteTweet(symbol)}
+              className={classes.chip}
+            />
+          )
+  
+
+      })
     }
       
     </Paper>
