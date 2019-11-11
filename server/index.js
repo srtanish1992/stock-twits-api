@@ -19,6 +19,6 @@ router(app);
 
 const port = process.env.PORT || 5004;
 const server = http.createServer(app);
-// server.listen(port,'157.245.209.85');
-server.listen(port);
+server.listen(port,'157.245.209.85');
+// server.listen(port);
 console.log('Server listening on:',port);

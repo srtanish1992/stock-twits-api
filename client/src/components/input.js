@@ -48,7 +48,7 @@ class Input extends React.Component {
         
         // console.log(inputStringArray);
 
-        axios.get('http://localhost:5004', {
+        axios.get('http://157.245.209.85:5004', {
             params: {
               symbols: this.state.inputStringArray
             }
