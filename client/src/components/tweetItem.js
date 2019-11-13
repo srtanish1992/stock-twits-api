@@ -2,50 +2,65 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import moment from 'moment';
 
-class TweetItem extends React.Component {
 
-    constructor(props){
-        super(props);
-    }
+const useStyles = makeStyles({
+    
+    card: {
+        // width: 275,
+        minHeight: 200,
+        backgroundColor: 'lightsteelblue'
+    },
+    title: {
+      fontSize: 14,
+      color:'black'
+    },
+  });
 
-    render(){
-        return(
 
-            <React.Fragment>
+const TweetItem = (props) => {
+
+    const classes = useStyles();
+
+    return (
+
+        <React.Fragment>
+            
+            
             {
-                this.props.tweet && this.props.tweet.map(t => (
-
+                props.tweet && props.tweet.map(t => (  
+                    
+                <Grid item xs={6} sm={4}>
                     <Card 
-                    // className={classes.card}
+                        className={classes.card}
                     key={t.id}
                     >
                         <CardContent>
                             <Typography 
-                                // className={classes.title} 
-                                color="textSecondary" 
+                                className={classes.title} 
                                 gutterBottom
                             >
                                 {t.body}
                             </Typography>
                             <Typography variant="h5" component="h2">
-                                {t.created_at}
+                                { moment(t.created_at).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                             </Typography>
                         </CardContent>
                     </Card>
-                
-                    )
 
-                    
+                </Grid>
+                
+                    )  
                     
                 )
             }
             
-            </React.Fragment>     
-            
-            
-        )
-    }
+            </React.Fragment> 
+
+    )
 }
 
 export default TweetItem;

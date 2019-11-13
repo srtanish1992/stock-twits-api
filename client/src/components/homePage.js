@@ -8,7 +8,6 @@ const HomePage = () => {
         <div>
             <React.Fragment>
                 <Input />
-                {/* <TweetContainer/> */}
             </React.Fragment>
         </div>
     );
