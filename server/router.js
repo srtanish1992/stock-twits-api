@@ -10,8 +10,6 @@ module.exports = function(app) {
 
         let allTweets = [];
 
-        // let uniqueTweets = [];
-
         let requests = []
         let  symbolCounts = [];
 
@@ -29,17 +27,12 @@ module.exports = function(app) {
                     count: responses[i].data.messages.length
                 }
 
-                // console.log(responses[i].data.symbol.symbol);
-
                 symbolCounts.push(symbolCount)
             }
-            // console.log(allTweets[0]);
-            // uniqueTweets = _.uniqBy(allTweets, 'id');
-            // use/access the results
             res.send({allTweets:allTweets,symbolCounts:symbolCounts}); 
           })).catch(error => {
-            // react on errors.
             console.log(error);
+            res.send({responseErr:true}); 
           })
 
 
